@@ -16,8 +16,8 @@ public class User {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
-    @Column(name = "patronimyc")
-    private String patronimyc;
+    @Column(name = "patronymic")
+    private String patronymic;
 
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;

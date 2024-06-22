@@ -22,7 +22,7 @@ CREATE TABLE users (
 	phone_number VARCHAR(11) NOT NULL,
 	firstname TEXT NOT NULL,
 	lastname TEXT NOT NULL,
-	patronimyc TEXT,
+	patronymic TEXT,
 	password TEXT NOT NULL,
 	created_at DATE,
 	deleted_at DATE
