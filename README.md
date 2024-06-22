@@ -4,7 +4,7 @@
 
 `Создание таблицы с ролей пользователей`
 
-```sql
+```postgresql
 CREATE TABLE user_roles (
 	id SERIAL PRIMARY KEY,
 	title TEXT NOT NULL
@@ -15,7 +15,7 @@ INSERT INTO user_roles VALUES (DEFAULT, 'admin'), (DEFAULT, 'employee'), (DEFAUL
 
 `Создание таблицы пользователей`
 
-```sql
+```postgresql
 CREATE TABLE users (
 	id SERIAL PRIMARY KEY,
 	role_id BIGINT REFERENCES user_roles(id),
