@@ -11,6 +11,6 @@ public class UserRole {
     @GeneratedValue
     private int id;
 
-    @Column (nullable = false, name = "role_name")
+    @Column (name = "role_name", nullable = false)
     private String roleName;
 }
