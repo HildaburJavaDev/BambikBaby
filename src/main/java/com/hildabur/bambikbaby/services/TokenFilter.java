@@ -4,6 +4,7 @@ import com.hildabur.bambikbaby.exceptions.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +30,13 @@ public class TokenFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws IOException {
+                                    FilterChain filterChain) throws IOException, ServletException {
+        String requestURI = request.getRequestURI();
+        if (requestURI.equals("/auth/signup")) {
+            filterChain.doFilter(request, response);
+            System.out.println("Greet!");
+            return;
+        }
         String jwt = extractJwtFromRequest(request);
         if (jwt != null) {
             try {
@@ -43,6 +50,7 @@ public class TokenFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (UserNotFoundException exception) {
+                System.out.println("UserNotFoundException");
                 throw new RuntimeException();
             }catch (ExpiredJwtException ex) {
                 handleExpiredJwtException(response);
@@ -51,6 +59,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 handleJwtException(response, ex);
             }
         }
+        filterChain.doFilter(request, response);
     }
 
     private String extractJwtFromRequest(HttpServletRequest request) {
