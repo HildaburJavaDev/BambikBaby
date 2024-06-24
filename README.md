@@ -7,7 +7,7 @@
 ```postgresql
 CREATE TABLE user_roles (
 	id SERIAL PRIMARY KEY,
-	title TEXT NOT NULL
+	name TEXT NOT NULL
 );
 
 INSERT INTO user_roles VALUES (DEFAULT, 'admin'), (DEFAULT, 'employee'), (DEFAULT, 'user');

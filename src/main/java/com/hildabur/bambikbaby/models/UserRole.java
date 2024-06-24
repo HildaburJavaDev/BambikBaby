@@ -11,6 +11,14 @@ public class UserRole {
     @GeneratedValue
     private int id;
 
-    @Column (name = "role_name", nullable = false)
-    private String roleName;
+    @Column (name = "name", nullable = false)
+    private String name;
+
+    @Override
+    public String toString() {
+        return "UserRole{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

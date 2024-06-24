@@ -27,6 +27,6 @@ public class UserDetailsServiceImpl implements ExtendedUserDetailsService {
                 (long) user.getId(),
                 user.getPhoneNumber(),
                 user.getPassword(),
-                user.getUserRole().getRoleName());
+                user.getUserRole().getName());
     }
 }
