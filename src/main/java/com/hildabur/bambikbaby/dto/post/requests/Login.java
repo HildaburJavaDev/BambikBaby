@@ -1,9 +1,9 @@
-package com.hildabur.bambikbaby.dto;
+package com.hildabur.bambikbaby.dto.post.requests;
 
 import lombok.Data;
 
 @Data
-public class UserLogin {
+public class Login {
     private String phoneNumber;
     private String password;
 }
