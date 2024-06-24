@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,13 +21,17 @@ public class JWTService {
     public String generateToken(Authentication authentication) {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         Map<String, Object> claims = new HashMap<>();
+        Calendar calendar = Calendar.getInstance();
+        Date issueAt = calendar.getTime();
+        calendar.add(Calendar.MILLISECOND, Integer.parseInt(jwtLifeTime));
+        Date expireAt = calendar.getTime();
         claims.put("userId", userDetails.getId());
         claims.put("roleName", userDetails.getRoleName());
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(userDetails.getPhoneNumber())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtLifeTime))
+                .setSubject(String.valueOf(userDetails.getId()))
+                .setIssuedAt(issueAt)
+                .setExpiration(expireAt)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
