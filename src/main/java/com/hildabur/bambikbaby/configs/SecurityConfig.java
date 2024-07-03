@@ -59,10 +59,10 @@ public class SecurityConfig {
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/auth/**").permitAll()
-//                        .requestMatchers("/secured/user").fullyAuthenticated()
-//                        .anyRequest().fullyAuthenticated())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/auth/signin").permitAll()
+                        .requestMatchers("/auth/signup").hasRole("admin")
+                        .anyRequest().authenticated())
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

@@ -37,17 +37,17 @@ public class JWTService {
 
     public Long getUserIdFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(jwtSecret).
-                parseClaimsJwt(token).
-                getBody().
-                get("userId", Long.class);
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class);
     }
 
-    public Long getRoleNameFromToken(String token) {
+    public String getRoleNameFromToken(String token) {
         return Jwts.parser()
-                .setSigningKey(jwtSecret).
-                parseClaimsJwt(token).
-                getBody().
-                get("roleName", Long.class);
+                .setSigningKey(jwtSecret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("roleName", String.class);
     }
 }

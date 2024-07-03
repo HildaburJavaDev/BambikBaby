@@ -3,6 +3,7 @@ package com.hildabur.bambikbaby.services;
 import com.hildabur.bambikbaby.exceptions.UserNotFoundException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,35 +32,26 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws IOException, ServletException {
-        String requestURI = request.getRequestURI();
-        if (requestURI.equals("/auth/signup")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         String jwt = extractJwtFromRequest(request);
         if (jwt != null) {
             try {
-                Long userId =jwtService.getUserIdFromToken(jwt);
+                Long userId = jwtService.getUserIdFromToken(jwt);
                 UserDetails userDetails = extendedUserDetailsService.loadUserById(userId);
                 if (userDetails != null) {
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    if (jwtService.getRoleNameFromToken(jwt).equals("admin")) {
+                        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
                 }
-            } catch (UserNotFoundException exception) {
-                System.out.println("UserNotFoundException");
-                throw new RuntimeException();
-            }catch (ExpiredJwtException ex) {
-                handleExpiredJwtException(response);
-            } catch (JwtException ex) {
-                System.out.println(ex);
-                handleJwtException(response, ex);
+            } catch (Exception ex) {
+                System.out.println("Exception occurred while processing JWT: " + ex);
+                return;
             }
         }
         filterChain.doFilter(request, response);
     }
+
 
     private String extractJwtFromRequest(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
