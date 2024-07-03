@@ -1,13 +1,10 @@
 package com.hildabur.bambikbaby.services;
 
-import com.hildabur.bambikbaby.exceptions.UserNotFoundException;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,8 +27,8 @@ public class TokenFilter extends OncePerRequestFilter {
 
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-                                    FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws IOException, ServletException {
         String jwt = extractJwtFromRequest(request);
         if (jwt != null) {
             try {
@@ -59,15 +56,5 @@ public class TokenFilter extends OncePerRequestFilter {
             return headerAuth.substring(7);
         }
         return null;
-    }
-
-    private void handleExpiredJwtException(HttpServletResponse response) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Expired JWT token");
-    }
-
-    private void handleJwtException(HttpServletResponse response, JwtException exception) throws IOException {
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Invalid JWT token");
     }
 }
