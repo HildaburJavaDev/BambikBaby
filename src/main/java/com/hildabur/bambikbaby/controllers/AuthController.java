@@ -1,6 +1,7 @@
 package com.hildabur.bambikbaby.controllers;
 
-import com.hildabur.bambikbaby.dto.post.requests.Signup;
+import com.hildabur.bambikbaby.dto.post.requests.SigninRequest;
+import com.hildabur.bambikbaby.dto.post.requests.SignupRequest;
 import com.hildabur.bambikbaby.exceptions.UserAlreadyExistException;
 import com.hildabur.bambikbaby.exceptions.UserRegistrationException;
 import com.hildabur.bambikbaby.exceptions.UserRoleNotExistException;
@@ -11,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private PasswordEncoder passwordEncoder;
+
     private AuthService authService;
     private JWTService jwtService;
     private AuthenticationManager authenticationManager;
@@ -31,11 +30,6 @@ public class AuthController {
     @Autowired
     public void setAuthService(AuthService authService) {
         this.authService = authService;
-    }
-
-    @Autowired
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
     }
 
     @Autowired
@@ -48,25 +42,25 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> registration(@RequestBody Signup signupRequest) {
-        System.out.println("hhhhh");
-        String hashedPassword = passwordEncoder.encode(signupRequest.getPassword());
-        User user = new User();
-        String userRole = signupRequest.getRoleName();
-        user.setFirstname(signupRequest.getFirstname());
-        user.setLastname(signupRequest.getLastname());
-        user.setPatronymic(signupRequest.getPatronymic());
-        user.setPhoneNumber(signupRequest.getPhoneNumber());
-        user.setPassword(hashedPassword);
+    public ResponseEntity<String> registration(@RequestBody SignupRequest signupRequest) {
         try {
-            System.out.println("popal");
-            authService.register(user, userRole);
+            return ResponseEntity.ok(authService.register(signupRequest));
         } catch (UserAlreadyExistException | UserRoleNotExistException exception) {
-            ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
         } catch (UserRegistrationException exception) {
-            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exception.getMessage());
         }
-        System.out.println("ghjgkbgkkhjb");
-        return ResponseEntity.ok("hk");
+
     }
+
+//    @PostMapping("/signin")
+//    public ResponseEntity<String> signin(@RequestBody SigninRequest signinRequest) {
+//        System.out.println(signinRequest.getPassword());
+//        String hashedPassword = passwordEncoder.encode(signinRequest.getPassword());
+//        System.out.println(hashedPassword);
+//        User candidate = new User();
+//        candidate.setPassword(hashedPassword);
+//        candidate.setPhoneNumber(signinRequest.getPhoneNumber());
+//        return ResponseEntity.ok(authService.authenticate(candidate).toString());
+//    }
 }
