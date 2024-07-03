@@ -4,9 +4,12 @@ import com.hildabur.bambikbaby.dao.UserRepository;
 import com.hildabur.bambikbaby.exceptions.UserNotFoundException;
 import com.hildabur.bambikbaby.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 
 @Service
 public class UserDetailsServiceImpl implements ExtendedUserDetailsService {
@@ -33,6 +36,7 @@ public class UserDetailsServiceImpl implements ExtendedUserDetailsService {
         return new UserDetailsImpl(
                 (long) user.getId(),
                 user.getPhoneNumber(),
-                user.getUserRole().getName());
+                user.getUserRole().getName(),
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + user.getUserRole().getName())));
     }
 }
