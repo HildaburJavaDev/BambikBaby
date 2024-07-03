@@ -34,7 +34,6 @@ public class TokenFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         if (requestURI.equals("/auth/signup")) {
             filterChain.doFilter(request, response);
-            System.out.println("Greet!");
             return;
         }
         String jwt = extractJwtFromRequest(request);

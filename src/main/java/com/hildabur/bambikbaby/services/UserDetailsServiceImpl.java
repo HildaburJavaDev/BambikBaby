@@ -18,7 +18,14 @@ public class UserDetailsServiceImpl implements ExtendedUserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException { return null; }
+    public UserDetails loadUserByUsername(String phoneNumber) throws UsernameNotFoundException {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден"));
+        return new UserDetailsImpl(
+                (long) user.getId(),
+                user.getPhoneNumber(),
+                user.getUserRole().getName());
+    }
 
     public UserDetails loadUserById(Long id) throws UserNotFoundException {
         User user = userRepository.findUserById(id)
@@ -26,7 +33,6 @@ public class UserDetailsServiceImpl implements ExtendedUserDetailsService {
         return new UserDetailsImpl(
                 (long) user.getId(),
                 user.getPhoneNumber(),
-                user.getPassword(),
                 user.getUserRole().getName());
     }
 }
