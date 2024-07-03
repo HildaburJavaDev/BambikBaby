@@ -3,10 +3,10 @@ package com.hildabur.bambikbaby.dto.post.responses;
 import lombok.Data;
 
 @Data
-public class Auth {
+public class AuthResponse {
     private String token;
 
-    public Auth(String token) {
+    public AuthResponse(String token) {
         this.token = token;
     }
 }
