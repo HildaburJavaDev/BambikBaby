@@ -25,7 +25,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "role_id")
     private UserRole userRole;
 
