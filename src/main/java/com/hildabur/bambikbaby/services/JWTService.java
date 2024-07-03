@@ -29,7 +29,6 @@ public class JWTService {
         claims.put("roleName", userDetails.getRoleName());
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(String.valueOf(userDetails.getId()))
                 .setIssuedAt(issueAt)
                 .setExpiration(expireAt)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
