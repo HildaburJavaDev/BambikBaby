@@ -2,12 +2,15 @@ package com.hildabur.bambikbaby.services;
 
 import com.hildabur.bambikbaby.dao.UserRepository;
 import com.hildabur.bambikbaby.dao.UserRoleRepository;
+import com.hildabur.bambikbaby.dto.post.requests.SigninRequest;
 import com.hildabur.bambikbaby.dto.post.requests.SignupRequest;
 import com.hildabur.bambikbaby.exceptions.*;
 import com.hildabur.bambikbaby.models.User;
 import com.hildabur.bambikbaby.models.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,14 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
     private UserRepository userRepository;
     private UserRoleRepository userRoleRepository;
+
+    private JWTService jwtService;
+
+    @Autowired
+    public void setJwtService(JWTService jwtService) {
+        this.jwtService = jwtService;
+    }
+
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -37,7 +48,9 @@ public class AuthService {
 
     public String register(SignupRequest signupRequest) throws UserAlreadyExistException, UserRoleNotExistException, UserRegistrationException {
         User candidate = createUserFromRequest(signupRequest);
-        checkUserExist(candidate.getPhoneNumber());
+        if (checkUserExist(candidate.getPhoneNumber())) {
+            throw new UserAlreadyExistException("Пользователь с таким номером телефона уже зарегистрирован");
+        }
         UserRole userRole = getUserRole(signupRequest.getRoleName());
         candidate.setUserRole(userRole);
         saveUser(candidate);
@@ -68,23 +81,24 @@ public class AuthService {
         }
         return userRole;
     }
-    private void checkUserExist(String phoneNumber) throws UserAlreadyExistException {
-        if (userRepository.existsByPhoneNumber(phoneNumber)) {
-            throw new UserAlreadyExistException("Пользователь с таким номером телефона уже зарегистрирован");
+    private boolean checkUserExist(String phoneNumber) throws DataAccessException {
+        return userRepository.existsByPhoneNumber(phoneNumber);
+    }
+
+    public Authentication authenticate(SigninRequest signinRequest) throws AuthenticationException {
+        User user = userRepository.findByPhoneNumber(signinRequest.getPhoneNumber())
+                .orElseThrow(() -> new AuthenticationException("Пользователь не найден"));
+
+        if (passwordEncoder.matches(signinRequest.getPassword(), user.getPassword())) {
+            UserDetailsImpl userDetails = new UserDetailsImpl((long) user.getId(), user.getPhoneNumber(), user.getUserRole().getName());
+            return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        } else {
+            throw new AuthenticationException("Неверный пароль");
         }
     }
 
-    public UserDetailsImpl authenticate(User candidate) throws AuthenticationException {
-        Optional<User> optionalUser = userRepository.findByPhoneNumber(candidate.getPhoneNumber());
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
-            if (user.getPassword().equals(candidate.getPassword())) {
-                return new UserDetailsImpl((long) user.getId(), user.getPhoneNumber(), user.getUserRole().getName());
-            }
-            else {
-                throw new AuthenticationException("Неверный пароль");
-            }
-        } else
-            throw new AuthenticationException("Пользователь с таким номером телефона не существует");
+    public String authenticateAndGenerateToken(SigninRequest signinRequest) throws AuthenticationException {
+        Authentication authentication = authenticate(signinRequest);
+        return jwtService.generateToken(authentication);
     }
 }
