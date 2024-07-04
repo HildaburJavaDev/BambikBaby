@@ -1,6 +1,6 @@
 package com.hildabur.bambikbaby.controllers;
 
-import com.hildabur.bambikbaby.dto.post.responses.UserDTO;
+import com.hildabur.bambikbaby.dto.get.UserDTO;
 import com.hildabur.bambikbaby.dto.post.requests.ChangePasswordRequest;
 import com.hildabur.bambikbaby.dto.post.responses.ChangePasswordResponse;
 import com.hildabur.bambikbaby.mappers.UserMapper;

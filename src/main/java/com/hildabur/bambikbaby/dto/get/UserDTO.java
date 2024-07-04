@@ -1,4 +1,4 @@
-package com.hildabur.bambikbaby.dto.post.responses;
+package com.hildabur.bambikbaby.dto.get;
 
 import com.hildabur.bambikbaby.models.UserRole;
 import lombok.Data;

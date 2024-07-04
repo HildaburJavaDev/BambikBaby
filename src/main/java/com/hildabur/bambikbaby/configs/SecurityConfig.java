@@ -64,6 +64,7 @@ public class SecurityConfig {
                         .requestMatchers("/auth/signin").permitAll()
                         .requestMatchers("/auth/signup").hasRole("admin")
                         .requestMatchers(HttpMethod.GET, "/user/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, "/groups/**").hasAnyRole("admin", "employee")
                         .requestMatchers("/user/**").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);

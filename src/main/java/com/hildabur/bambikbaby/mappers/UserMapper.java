@@ -1,6 +1,6 @@
 package com.hildabur.bambikbaby.mappers;
 
-import com.hildabur.bambikbaby.dto.post.responses.UserDTO;
+import com.hildabur.bambikbaby.dto.get.UserDTO;
 import com.hildabur.bambikbaby.models.User;
 
 public class UserMapper {
