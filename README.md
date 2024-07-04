@@ -28,3 +28,12 @@ CREATE TABLE users (
 	deleted_at DATE
 )
 ```
+`создание таблицы детских групп`
+
+```postgresql
+create table child_groups (
+	id SERIAL PRIMARY KEY,
+	chief_id BIGINT REFERENCES users(id),
+	title TEXT NOT NULL
+)
+```
