@@ -38,11 +38,9 @@ public class TokenFilter extends OncePerRequestFilter {
                 Long userId = jwtService.getUserIdFromToken(jwt);
                 UserDetails userDetails = extendedUserDetailsService.loadUserById(userId);
                 if (userDetails != null) {
-                    if (jwtService.getRoleNameFromToken(jwt).equals("admin")) {
-                        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                                userDetails, null, userDetails.getAuthorities());
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (ExpiredJwtException ex) {
                 handleExpiredJwtException(ex, response);

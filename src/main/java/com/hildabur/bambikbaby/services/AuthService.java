@@ -11,13 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AuthService {
@@ -49,7 +44,7 @@ public class AuthService {
     }
 
 
-    public String register(SignupRequest signupRequest) throws UserAlreadyExistException, UserRoleNotExistException, UserRegistrationException {
+    public User register(SignupRequest signupRequest) throws UserAlreadyExistException, UserRoleNotExistException, UserRegistrationException {
         User candidate = createUserFromRequest(signupRequest);
         if (checkUserExist(candidate.getPhoneNumber())) {
             throw new UserAlreadyExistException("Пользователь с таким номером телефона уже зарегистрирован");
@@ -57,7 +52,7 @@ public class AuthService {
         UserRole userRole = getUserRole(signupRequest.getRoleName());
         candidate.setUserRole(userRole);
         saveUser(candidate);
-        return candidate.toString();
+        return candidate;
     }
 
     public User createUserFromRequest(SignupRequest signupRequest) {
