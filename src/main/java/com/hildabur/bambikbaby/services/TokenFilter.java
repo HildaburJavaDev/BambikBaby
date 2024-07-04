@@ -1,5 +1,8 @@
 package com.hildabur.bambikbaby.services;
 
+import com.hildabur.bambikbaby.exceptions.UserNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,8 +44,14 @@ public class TokenFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
-            } catch (Exception ex) {
-                System.out.println("Exception occurred while processing JWT: " + ex);
+            } catch (ExpiredJwtException ex) {
+                handleExpiredJwtException(ex, response);
+                return;
+            } catch (JwtException ex) {
+                handleJwtException(ex, response);
+                return;
+            } catch (UserNotFoundException ex) {
+                handleUserNotFoundException(ex, response);
                 return;
             }
         }
@@ -50,6 +59,20 @@ public class TokenFilter extends OncePerRequestFilter {
     }
 
 
+    private void handleExpiredJwtException(ExpiredJwtException ex, HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(ex.getMessage());
+    }
+
+    private void handleJwtException(JwtException ex, HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.getWriter().write(ex.getMessage());
+    }
+
+    private void handleUserNotFoundException(UserNotFoundException ex, HttpServletResponse response) throws IOException {
+        response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        response.getWriter().write("User not found: " + ex.getMessage());
+    }
     private String extractJwtFromRequest(HttpServletRequest request) {
         String headerAuth = request.getHeader("Authorization");
         if (headerAuth != null && headerAuth.startsWith("Bearer ")) {

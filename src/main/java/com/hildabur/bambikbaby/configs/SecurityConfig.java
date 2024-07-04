@@ -62,7 +62,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/signin").permitAll()
                         .requestMatchers("/auth/signup").hasRole("admin")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/user/**").authenticated()
+                        .anyRequest().permitAll())
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
