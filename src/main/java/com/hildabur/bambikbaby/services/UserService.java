@@ -2,10 +2,13 @@ package com.hildabur.bambikbaby.services;
 
 import com.hildabur.bambikbaby.dao.UserRepository;
 import com.hildabur.bambikbaby.dto.post.requests.ChangePasswordRequest;
+import com.hildabur.bambikbaby.models.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -31,6 +34,10 @@ public class UserService {
             } else {
                 return false;
             }
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Transactional
