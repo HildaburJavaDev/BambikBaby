@@ -1,6 +1,7 @@
 package com.hildabur.bambikbaby.mappers;
 
 import com.hildabur.bambikbaby.dto.get.ChildGroupDTO;
+import com.hildabur.bambikbaby.dto.post.requests.ChildGroupPostDTO;
 import com.hildabur.bambikbaby.models.ChildGroup;
 
 public class ChildGroupMapper {
@@ -10,5 +11,11 @@ public class ChildGroupMapper {
         childGroupDTO.setTitle(childGroup.getTitle());
         childGroupDTO.setChief(UserMapper.toDTO(childGroup.getChief()));
         return childGroupDTO;
+    }
+
+    public static ChildGroup toEntity(ChildGroupPostDTO childGroupPostDTO) {
+        ChildGroup childGroup = new ChildGroup();
+        childGroup.setTitle(childGroupPostDTO.getTitle());
+        return childGroup;
     }
 }
