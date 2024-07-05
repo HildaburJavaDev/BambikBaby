@@ -1,6 +1,7 @@
 package com.hildabur.bambikbaby.controllers;
 
 import com.hildabur.bambikbaby.dto.get.UserDTO;
+import com.hildabur.bambikbaby.dto.patch.UpdateUserDTO;
 import com.hildabur.bambikbaby.dto.post.requests.ChangePasswordRequest;
 import com.hildabur.bambikbaby.dto.post.responses.ChangePasswordResponse;
 import com.hildabur.bambikbaby.mappers.UserMapper;
@@ -49,5 +50,14 @@ public class UserController {
                                         .map(UserMapper::toDTO).
                                         collect(Collectors.toList());
         return ResponseEntity.ok(userDTOs);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO updateUserDTO, Authentication authentication) {
+       if (userService.updateUserData((UserDetailsImpl) authentication.getPrincipal(), updateUserDTO, id)) {
+           return ResponseEntity.ok("Данные успешно обновлены");
+       } else {
+           return ResponseEntity.status(HttpStatus.CONFLICT).body("Нет данных для обновления");
+       }
     }
 }
