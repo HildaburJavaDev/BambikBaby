@@ -26,13 +26,6 @@ public class UserController {
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
-
-    @PostMapping("/test")
-    public String test(Authentication authentication) {
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        System.out.println(userDetails.toString());
-        return "hello";
-    }
     @PostMapping("/change-password")
     public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest, Authentication authentication) {
         try {
