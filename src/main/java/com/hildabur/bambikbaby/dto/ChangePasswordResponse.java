@@ -1,4 +1,4 @@
-package com.hildabur.bambikbaby.dto.post.responses;
+package com.hildabur.bambikbaby.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

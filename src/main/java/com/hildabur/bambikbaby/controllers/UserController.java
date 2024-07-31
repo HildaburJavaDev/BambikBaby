@@ -1,9 +1,9 @@
 package com.hildabur.bambikbaby.controllers;
 
-import com.hildabur.bambikbaby.dto.get.UserDTO;
-import com.hildabur.bambikbaby.dto.patch.UpdateUserDTO;
-import com.hildabur.bambikbaby.dto.post.requests.ChangePasswordRequest;
-import com.hildabur.bambikbaby.dto.post.responses.ChangePasswordResponse;
+import com.hildabur.bambikbaby.dto.UserDTO;
+import com.hildabur.bambikbaby.dto.UpdateUserDTO;
+import com.hildabur.bambikbaby.dto.ChangePasswordRequest;
+import com.hildabur.bambikbaby.dto.ChangePasswordResponse;
 import com.hildabur.bambikbaby.mappers.UserMapper;
 import com.hildabur.bambikbaby.models.User;
 import com.hildabur.bambikbaby.services.UserDetailsImpl;
@@ -53,4 +53,6 @@ public class UserController {
            return ResponseEntity.status(HttpStatus.CONFLICT).body("Нет данных для обновления");
        }
     }
+
+
 }

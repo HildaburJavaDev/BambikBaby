@@ -1,4 +1,4 @@
-package com.hildabur.bambikbaby.dto.post.requests;
+package com.hildabur.bambikbaby.dto;
 
 import lombok.Data;
 

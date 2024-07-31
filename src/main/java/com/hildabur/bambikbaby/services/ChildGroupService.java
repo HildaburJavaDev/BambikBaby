@@ -2,7 +2,7 @@ package com.hildabur.bambikbaby.services;
 
 import com.hildabur.bambikbaby.dao.ChildGroupRepository;
 import com.hildabur.bambikbaby.dao.UserRepository;
-import com.hildabur.bambikbaby.dto.get.ChildGroupDTO;
+import com.hildabur.bambikbaby.dto.ChildGroupDTO;
 import com.hildabur.bambikbaby.mappers.ChildGroupMapper;
 import com.hildabur.bambikbaby.models.ChildGroup;
 import com.hildabur.bambikbaby.models.User;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ChildGroupService {
@@ -31,8 +30,8 @@ public class ChildGroupService {
        return childGroupRepository.findAll();
     }
 
-    private List<ChildGroup> findAllForEmployee(int chiefId) {
-        return childGroupRepository.findByChiefIdWithUserNative(chiefId);
+    private List<ChildGroup> findAllForEmployee(int leaderId) {
+        return childGroupRepository.findByChiefIdWithUserNative(leaderId);
     }
 
     public List<ChildGroup> findAll(UserDetailsImpl userDetails) {
@@ -43,16 +42,28 @@ public class ChildGroupService {
         }
     }
 
-    public ChildGroupDTO createGroup(ChildGroup childGroup, int chiefId) {
-        User user = userRepository.findById(chiefId)
+    public ChildGroupDTO createGroup(ChildGroup childGroup, int leaderId) {
+        User user = userRepository.findById(leaderId)
                 .orElseThrow(() -> new IllegalArgumentException("Пользователь не найден"));
-        if (user.getUserRole().getName().equals("admin") || user.getUserRole().getName().equals("employee")) {
+        if (checkUserLeaderPermission(user)) {
             childGroup.setChief(user);
             childGroupRepository.save(childGroup);
             return ChildGroupMapper.toDTO(childGroup);
         } else {
             throw new IllegalArgumentException("Нельзя назначить простого пользователя воспитателем в группе");
         }
-
+    }
+    private boolean checkUserLeaderPermission(User user) {
+        return user.getUserRole().getName().equals("admin") || user.getUserRole().getName().equals("employee");
+    }
+    public void updateGroupLeader(int leaderId, int groupId) {
+        User user = userRepository.findById(leaderId)
+                .orElseThrow(()-> new IllegalArgumentException("Пользователь не найден"));
+        if (checkUserLeaderPermission(user)) {
+            ChildGroup childGroup = childGroupRepository.findById(groupId)
+                    .orElseThrow(() -> new IllegalArgumentException("Группа не найдена"));
+            childGroup.setChief(user);
+            childGroupRepository.save(childGroup);
+        }
     }
 }

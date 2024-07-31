@@ -1,7 +1,7 @@
 package com.hildabur.bambikbaby.mappers;
 
-import com.hildabur.bambikbaby.dto.get.ChildGroupDTO;
-import com.hildabur.bambikbaby.dto.post.requests.ChildGroupPostDTO;
+import com.hildabur.bambikbaby.dto.ChildGroupDTO;
+import com.hildabur.bambikbaby.dto.ChildGroupPostDTO;
 import com.hildabur.bambikbaby.models.ChildGroup;
 
 public class ChildGroupMapper {

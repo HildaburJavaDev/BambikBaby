@@ -1,8 +1,8 @@
 package com.hildabur.bambikbaby.services;
 
 import com.hildabur.bambikbaby.dao.UserRepository;
-import com.hildabur.bambikbaby.dto.patch.UpdateUserDTO;
-import com.hildabur.bambikbaby.dto.post.requests.ChangePasswordRequest;
+import com.hildabur.bambikbaby.dto.UpdateUserDTO;
+import com.hildabur.bambikbaby.dto.ChangePasswordRequest;
 import com.hildabur.bambikbaby.models.User;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;

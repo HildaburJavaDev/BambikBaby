@@ -1,7 +1,8 @@
 package com.hildabur.bambikbaby.controllers;
 
-import com.hildabur.bambikbaby.dto.get.ChildGroupDTO;
-import com.hildabur.bambikbaby.dto.post.requests.ChildGroupPostDTO;
+import com.hildabur.bambikbaby.dto.ChildGroupDTO;
+import com.hildabur.bambikbaby.dto.ChildGroupPostDTO;
+import com.hildabur.bambikbaby.dto.GroupLeaderDTO;
 import com.hildabur.bambikbaby.mappers.ChildGroupMapper;
 import com.hildabur.bambikbaby.models.ChildGroup;
 import com.hildabur.bambikbaby.services.ChildGroupService;
@@ -29,7 +30,6 @@ public class ChildGroupController {
     public ResponseEntity<?> getChildGroups(Authentication authentication) {
         List<ChildGroup> childGroups = childGroupService.findAll((UserDetailsImpl) authentication.getPrincipal());
         if (childGroups.isEmpty()) {
-            // выбросить исключение, которое потом ExceptionHandler обработает
             return ResponseEntity.ok("Нет доступных групп");
         }
         List<ChildGroupDTO> childGroupDTOs = childGroups.stream()
@@ -46,6 +46,10 @@ public class ChildGroupController {
         } catch (IllegalArgumentException exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
+    }
+    @PatchMapping("/")
+    public ResponseEntity<?> updateGroupChief(@RequestBody GroupLeaderDTO groupLeaderDTO) {
 
+        return ResponseEntity.ok("Пользователь назначен в группу");
     }
 }

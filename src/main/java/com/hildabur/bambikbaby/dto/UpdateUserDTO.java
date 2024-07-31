@@ -1,4 +1,4 @@
-package com.hildabur.bambikbaby.dto.patch;
+package com.hildabur.bambikbaby.dto;
 
 import lombok.Data;
 

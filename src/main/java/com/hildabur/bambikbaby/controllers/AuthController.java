@@ -1,8 +1,8 @@
 package com.hildabur.bambikbaby.controllers;
 
-import com.hildabur.bambikbaby.dto.post.requests.SigninRequest;
-import com.hildabur.bambikbaby.dto.post.requests.SignupRequest;
-import com.hildabur.bambikbaby.dto.post.responses.AuthResponse;
+import com.hildabur.bambikbaby.dto.SigninRequest;
+import com.hildabur.bambikbaby.dto.SignupRequest;
+import com.hildabur.bambikbaby.dto.AuthResponse;
 import com.hildabur.bambikbaby.exceptions.AuthenticationException;
 import com.hildabur.bambikbaby.exceptions.UserAlreadyExistException;
 import com.hildabur.bambikbaby.exceptions.UserRegistrationException;

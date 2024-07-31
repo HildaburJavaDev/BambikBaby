@@ -2,8 +2,8 @@ package com.hildabur.bambikbaby.services;
 
 import com.hildabur.bambikbaby.dao.UserRepository;
 import com.hildabur.bambikbaby.dao.UserRoleRepository;
-import com.hildabur.bambikbaby.dto.post.requests.SigninRequest;
-import com.hildabur.bambikbaby.dto.post.requests.SignupRequest;
+import com.hildabur.bambikbaby.dto.SigninRequest;
+import com.hildabur.bambikbaby.dto.SignupRequest;
 import com.hildabur.bambikbaby.exceptions.*;
 import com.hildabur.bambikbaby.models.User;
 import com.hildabur.bambikbaby.models.UserRole;

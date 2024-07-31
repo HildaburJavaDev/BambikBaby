@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ChildGroupRepository extends JpaRepository<ChildGroup, Integer> {
     List<ChildGroup> findAll();
-    @Query(value = "SELECT * FROM child_groups cg JOIN users u ON u.id = cg.chief_id WHERE cg.chief_id = :chiefId", nativeQuery = true)
-    List<ChildGroup> findByChiefIdWithUserNative(int chiefId);
+    @Query(value = "SELECT * FROM child_groups cg JOIN users u ON u.id = cg.chief_id WHERE cg.chief_id = :leaderId", nativeQuery = true)
+    List<ChildGroup> findByChiefIdWithUserNative(int leaderId);
 }
