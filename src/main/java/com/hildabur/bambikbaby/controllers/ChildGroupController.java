@@ -47,9 +47,13 @@ public class ChildGroupController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
         }
     }
-    @PatchMapping("/")
-    public ResponseEntity<?> updateGroupChief(@RequestBody GroupLeaderDTO groupLeaderDTO) {
-
-        return ResponseEntity.ok("Пользователь назначен в группу");
+    @PatchMapping("/{groupId}")
+    public ResponseEntity<?> updateGroupChief(@PathVariable int groupId, @RequestBody GroupLeaderDTO groupLeaderDTO) {
+        try {
+            childGroupService.updateGroupLeader(groupLeaderDTO.getUserId(), groupId);
+            return ResponseEntity.ok("Пользователь назначен в группу");
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        }
     }
 }

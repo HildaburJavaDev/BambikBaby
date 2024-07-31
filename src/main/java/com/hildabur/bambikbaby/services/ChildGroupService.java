@@ -64,6 +64,8 @@ public class ChildGroupService {
                     .orElseThrow(() -> new IllegalArgumentException("Группа не найдена"));
             childGroup.setChief(user);
             childGroupRepository.save(childGroup);
+        } else {
+            throw new IllegalArgumentException("Данный пользователь не является администратором или работником");
         }
     }
 }
